@@ -1,26 +1,23 @@
 import express, {type Application} from "express";
-import { createInernalAuthMiddleware } from "@chatapp/common";
-import { env } from "@/config/env";
-import morgan from "morgan";
-
 import cors from "cors" ; 
 import helmet from "helmet";
-import {errorHandler} from "@/middleware/error-handler";
-import { registerRoutes } from "@/routes";
+import {errorHandler} from '@/middleware/error-handler';
+import {registerRoutes} from '@/routes';
+
+
 export const createApp = (): Application => {
     const app = express();
     app.use(helmet());//***************** */
     app.use(cors({
         origin:"*",
         credentials:true,//*************/
-    })
+    }),
 );
 
 
 app.use(express.json());//*********** */
-app.use(morgan("dev"));//************* */
-app.use(express.urlencoded({ extended: true }));//************** */
-app.use(createInernalAuthMiddleware(env.INTERNAL_AUTH_TOKEN));
+app.use(express.urlencoded({ extended: true }));
+
 registerRoutes(app);
 app.use((_req,res)=>{
     res.status(404).json({message:"Not Found"});
