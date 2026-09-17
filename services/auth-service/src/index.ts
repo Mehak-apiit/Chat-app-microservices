@@ -4,10 +4,12 @@ import {env} from "@/config/env";
 import {logger} from "@/utils/looger";
 import { closeDatabase, connectToDatabase } from "./db/sequelize";
 import { initModels } from "./models";
+import {initPublisher} from '@/messaging/event-publishing';
 const main = async () => {
     try {
         await connectToDatabase();
         await initModels();
+        await initPublisher();
         const app = createApp();
         const server = createServer(app);
         const port = env.AUTH_SERVICE_PORT;
